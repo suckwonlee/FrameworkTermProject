@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Diary</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="diary-body">
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <div class="logo-wrap">
+                <span class="logo-icon">📖</span>
+                <a th:href="@{/}" class="logo-text">Diary</a>
+            </div>
+        </div>
+
+        <nav class="header-right">
+            <a th:href="@{/}" class="nav-item">홈</a>
+            <a th:href="@{/diary/write}" class="nav-item">다이어리</a>
+
+            <a th:href="@{/login}" class="nav-item nav-ghost">로그인</a>
+            <a th:href="@{/register}" class="nav-item nav-primary">회원가입</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main-area">
+    <div th:replace="${content}"></div>
+</main>
+
+</body>
+</html>

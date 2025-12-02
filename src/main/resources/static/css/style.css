@@ -1,0 +1,89 @@
+/* ===== 전체 배경/레이아웃 기본 ===== */
+
+body.diary-body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #ffe9a9; /* 위아래 옅은 노랑 */
+}
+
+/* 메인 영역: 가운데 파스텔 민트 박스 느낌 */
+.main-area {
+    min-height: calc(100vh - 70px); /* 헤더 높이만큼 제외 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e8f4ec; /* 연한 민트색 */
+}
+
+/* ===== 헤더 보완 ===== */
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    font-size: 22px;
+}
+
+/* header, header-flex, logo, nav-menu, nav-item 은
+   기존 정의를 그대로 사용하되, 필요시 약간만 튜닝 */
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 12px 32px;
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #4a6b5a;
+    text-decoration: none;
+}
+
+/* ===== 메인 히어로 영역 ===== */
+
+.home-hero {
+    text-align: center;
+}
+
+.home-title {
+    font-size: 54px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #365046;
+    margin-bottom: 32px;
+}
+
+/* "일기 작성" 버튼 */
+.home-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    border-radius: 999px;
+    border: none;
+    background: #9cc9aa; /* 부드러운 초록 버튼 */
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.home-btn:hover {
+    filter: brightness(0.97);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.home-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}

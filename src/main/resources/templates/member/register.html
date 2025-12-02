@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::content})">
+
+<head>
+    <title>회원가입</title>
+</head>
+
+<body>
+<div th:fragment="content" class="auth-wrapper">
+
+    <div class="auth-card">
+        <h2 class="auth-title">회원가입</h2>
+        <p class="auth-subtitle">하루를 기록할 나만의 공간을 만들어 보세요.</p>
+
+        <form method="post" th:object="${joinRequest}" class="auth-form">
+
+            <div class="auth-field">
+                <label class="auth-label" for="loginId">아이디</label>
+                <input id="loginId"
+                       type="text"
+                       th:field="*{loginId}"
+                       class="auth-input"
+                       placeholder="로그인에 사용할 아이디">
+                <div class="auth-error-field" th:if="${#fields.hasErrors('loginId')}"
+                     th:errors="*{loginId}">아이디 오류</div>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="email">이메일</label>
+                <input id="email"
+                       type="email"
+                       th:field="*{email}"
+                       class="auth-input"
+                       placeholder="이메일 주소">
+                <div class="auth-error-field" th:if="${#fields.hasErrors('email')}"
+                     th:errors="*{email}">이메일 오류</div>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="nickname">닉네임</label>
+                <input id="nickname"
+                       type="text"
+                       th:field="*{nickname}"
+                       class="auth-input"
+                       placeholder="화면에 표시될 이름">
+                <div class="auth-error-field" th:if="${#fields.hasErrors('nickname')}"
+                     th:errors="*{nickname}">닉네임 오류</div>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="password">비밀번호</label>
+                <input id="password"
+                       type="password"
+                       th:field="*{password}"
+                       class="auth-input"
+                       placeholder="비밀번호">
+                <div class="auth-error-field" th:if="${#fields.hasErrors('password')}"
+                     th:errors="*{password}">비밀번호 오류</div>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="passwordCheck">비밀번호 확인</label>
+                <input id="passwordCheck"
+                       type="password"
+                       th:field="*{passwordCheck}"
+                       class="auth-input"
+                       placeholder="비밀번호를 한 번 더 입력">
+                <div class="auth-error-field" th:if="${#fields.hasErrors('passwordCheck')}"
+                     th:errors="*{passwordCheck}">비밀번호 확인 오류</div>
+            </div>
+
+            <div th:if="${error}" class="auth-error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <button type="submit" class="auth-btn-primary">가입하기</button>
+        </form>
+
+        <div class="auth-link-row">
+            <span>이미 계정이 있으신가요?</span>
+            <a th:href="@{/login}" class="auth-link">로그인</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
