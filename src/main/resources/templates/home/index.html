@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
       th:replace="layout/layout :: layout(~{::title}, ~{::content})">
 
 <head>
@@ -7,14 +8,58 @@
 </head>
 
 <body>
+<div th:fragment="content" class="main-area">
+    <div class="page-container">
 
-<div th:fragment="content" class="home-hero">
-    <h1 class="home-title">오늘의 일기</h1>
+        <!-- 메인 히어로 카드 -->
+        <section class="home-hero">
+            <h1 class="home-title">오늘의 일기</h1>
+            <p class="home-subtitle">하루를 가볍게 적어두고, 나중에 천천히 다시 꺼내 볼 수 있는 작은 노트예요.</p>
 
-    <a th:href="@{/diary/write}" class="home-btn">
-        일기 작성
-    </a>
+            <a th:href="@{/diary/write}" class="home-btn">일기 작성</a>
+        </section>
+
+        <!-- 기능 소개 3칸 -->
+        <section class="home-feature-row">
+            <div class="home-feature-card">
+                <h3 class="home-feature-title">감정 태그로 기록</h3>
+                <p class="home-feature-text">
+                    기쁨·슬픔·몸 상태 같은 감정을 태그로 함께 남겨 두면,
+                    나중에 어떤 날이었는지 훨씬 쉽게 떠올릴 수 있어요.
+                </p>
+            </div>
+            <div class="home-feature-card">
+                <h3 class="home-feature-title">달력으로 한눈에</h3>
+                <p class="home-feature-text">
+                    달력에서 어떤 날에 일기를 썼는지, 어떤 기분이 많았는지
+                    한 번에 볼 수 있도록 준비하고 있어요.
+                </p>
+            </div>
+            <div class="home-feature-card">
+                <h3 class="home-feature-title">사진과 함께</h3>
+                <p class="home-feature-text">
+                    오늘 찍은 사진 한 장만 올려도 그날의 분위기가 훨씬 더
+                    생생하게 남습니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 로그인 / 회원가입 안내 : 비로그인일 때만 -->
+        <section class="home-auth-callout" sec:authorize="isAnonymous()">
+            <div class="home-auth-text">
+                <h3 class="home-auth-title">내 일기를 안전하게 보관하고 싶다면</h3>
+                <p class="home-auth-desc">
+                    로그인 후 작성한 내용은 나만 볼 수 있게 저장됩니다.
+                    다른 기기에서도 같은 계정으로 이어서 사용할 수 있어요.
+                </p>
+            </div>
+            <div class="home-auth-actions">
+                <a th:href="@{/login}" class="btn-secondary">로그인</a>
+                <a th:href="@{/register}" class="btn-primary">회원가입</a>
+            </div>
+        </section>
+
+    </div>
 </div>
-
 </body>
 </html>

@@ -1,37 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:fragment="layout(title, content)">
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title th:replace="${title}">Diary</title>
+    <title th:replace="${title}">오늘의 일기</title>
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/diary.css}">
 </head>
 
 <body class="diary-body">
 
+<!-- 상단 헤더 -->
 <header class="header">
     <div class="header-inner">
-        <div class="header-left">
-            <div class="logo-wrap">
-                <span class="logo-icon">📖</span>
-                <a th:href="@{/}" class="logo-text">Diary</a>
+
+        <div class="logo-area">
+            <span class="logo-icon">📖</span>
+            <a th:href="@{/}" class="logo">오늘의 일기</a>
+            <span class="logo-sub">하루를 가볍게 기록하는 공간</span>
+        </div>
+
+        <div class="header-right">
+            <nav class="nav-menu">
+                <a th:href="@{/}" class="nav-item">홈</a>
+
+                <span sec:authorize="isAuthenticated()">
+                    <a th:href="@{/diary/write}" class="nav-item">일기 작성</a>
+                    <a th:href="@{/diary/my}" class="nav-item">내 일기장</a>
+                    <a th:href="@{/logout}" class="nav-item">로그아웃</a>
+                </span>
+
+                <span sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="nav-item">로그인</a>
+                    <a th:href="@{/register}" class="nav-item nav-highlight">회원가입</a>
+                </span>
+            </nav>
+
+            <div class="header-user" sec:authorize="isAuthenticated()">
+                <span class="header-user-name" sec:authentication="name">사용자</span>
+                <span class="header-user-greet">님, 반갑습니다.</span>
             </div>
         </div>
 
-        <nav class="header-right">
-            <a th:href="@{/}" class="nav-item">홈</a>
-            <a th:href="@{/diary/write}" class="nav-item">다이어리</a>
-
-            <a th:href="@{/login}" class="nav-item nav-ghost">로그인</a>
-            <a th:href="@{/register}" class="nav-item nav-primary">회원가입</a>
-        </nav>
     </div>
 </header>
 
-<main class="main-area">
-    <div th:replace="${content}"></div>
+<!-- 메인 영역 -->
+<main class="main">
+    <div class="page-container" th:replace="${content}"></div>
 </main>
+
+<!-- ========================= -->
+<!--     삭제 팝업 (공통)       -->
+<!-- ========================= -->
+<div id="delete-popup-overlay"></div>
+
+<div id="delete-popup">
+    <div class="delete-popup-title">정말 삭제할까요?</div>
+    <div class="delete-popup-message">
+        이 페이지에 남겨둔 오늘의 기억을<br>
+        정말로 지우시겠습니까?
+    </div>
+
+    <div class="delete-popup-buttons">
+        <button id="delete-popup-confirm" class="delete-popup-confirm-btn">삭제</button>
+        <button id="delete-popup-cancel" class="delete-popup-cancel-btn">취소</button>
+    </div>
+</div>
+
+<!-- 삭제 스크립트 -->
+<script src="/js/delete-confirm.js"></script>
 
 </body>
 </html>

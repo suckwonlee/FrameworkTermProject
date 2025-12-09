@@ -9,80 +9,153 @@
 <body>
 <div th:fragment="content" class="auth-wrapper">
 
-    <div class="auth-card">
-        <h2 class="auth-title">회원가입</h2>
-        <p class="auth-subtitle">하루를 기록할 나만의 공간을 만들어 보세요.</p>
+    <!-- 가운데 카드 + 양옆 노트들 레이아웃 -->
+    <div class="auth-layout">
 
-        <form method="post" th:object="${joinRequest}" class="auth-form">
+        <!-- 왼쪽 노트 묶음 -->
+        <div class="auth-side-column auth-side-left">
+            <!-- 노트 1 -->
+            <section class="auth-note auth-note-1">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-orange">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">가입 전에 한 번만 확인!</h3>
+                <ul class="auth-note-list">
+                    <li>자주 사용하는 이메일 주소인지 한 번 더 체크해 주세요.</li>
+                    <li>로그인에 쓸 아이디를 나중에 기억하기 쉬운지 살펴보세요.</li>
+                    <li>공용 PC에서 사용하는 아이디와는 구분해 두시면 더 안전해요.</li>
+                </ul>
+            </section>
 
-            <div class="auth-field">
-                <label class="auth-label" for="loginId">아이디</label>
-                <input id="loginId"
-                       type="text"
-                       th:field="*{loginId}"
-                       class="auth-input"
-                       placeholder="로그인에 사용할 아이디">
-                <div class="auth-error-field" th:if="${#fields.hasErrors('loginId')}"
-                     th:errors="*{loginId}">아이디 오류</div>
-            </div>
-
-            <div class="auth-field">
-                <label class="auth-label" for="email">이메일</label>
-                <input id="email"
-                       type="email"
-                       th:field="*{email}"
-                       class="auth-input"
-                       placeholder="이메일 주소">
-                <div class="auth-error-field" th:if="${#fields.hasErrors('email')}"
-                     th:errors="*{email}">이메일 오류</div>
-            </div>
-
-            <div class="auth-field">
-                <label class="auth-label" for="nickname">닉네임</label>
-                <input id="nickname"
-                       type="text"
-                       th:field="*{nickname}"
-                       class="auth-input"
-                       placeholder="화면에 표시될 이름">
-                <div class="auth-error-field" th:if="${#fields.hasErrors('nickname')}"
-                     th:errors="*{nickname}">닉네임 오류</div>
-            </div>
-
-            <div class="auth-field">
-                <label class="auth-label" for="password">비밀번호</label>
-                <input id="password"
-                       type="password"
-                       th:field="*{password}"
-                       class="auth-input"
-                       placeholder="비밀번호">
-                <div class="auth-error-field" th:if="${#fields.hasErrors('password')}"
-                     th:errors="*{password}">비밀번호 오류</div>
-            </div>
-
-            <div class="auth-field">
-                <label class="auth-label" for="passwordCheck">비밀번호 확인</label>
-                <input id="passwordCheck"
-                       type="password"
-                       th:field="*{passwordCheck}"
-                       class="auth-input"
-                       placeholder="비밀번호를 한 번 더 입력">
-                <div class="auth-error-field" th:if="${#fields.hasErrors('passwordCheck')}"
-                     th:errors="*{passwordCheck}">비밀번호 확인 오류</div>
-            </div>
-
-            <div th:if="${error}" class="auth-error">
-                <p th:text="${error}"></p>
-            </div>
-
-            <button type="submit" class="auth-btn-primary">가입하기</button>
-        </form>
-
-        <div class="auth-link-row">
-            <span>이미 계정이 있으신가요?</span>
-            <a th:href="@{/login}" class="auth-link">로그인</a>
+            <!-- 노트 2 -->
+            <section class="auth-note auth-note-2">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-green">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">안전한 계정 만드는 법</h3>
+                <ul class="auth-note-list">
+                    <li>비밀번호는 8자 이상, 문자와 숫자를 섞어서 만들어 보세요.</li>
+                    <li>중요한 서비스와는 다른 비밀번호를 사용하는 걸 추천드려요.</li>
+                    <li>잊어버리지 않도록 나만 볼 수 있는 곳에 살짝 메모해 두면 좋아요.</li>
+                </ul>
+            </section>
         </div>
-    </div>
 
+        <!-- 가운데 회원가입 카드 -->
+        <div class="auth-card">
+            <div class="auth-header-icon">📘</div>
+
+            <h2 class="auth-title">회원가입</h2>
+            <p class="auth-subtitle">하루를 기록할 나만의 공간을 만들어 보세요.</p>
+
+            <form method="post" th:object="${joinRequest}" class="auth-form">
+
+                <!-- 아이디 -->
+                <div class="auth-field">
+                    <label class="auth-label" for="loginId">아이디</label>
+                    <input id="loginId"
+                           type="text"
+                           th:field="*{loginId}"
+                           class="auth-input"
+                           placeholder="로그인에 사용할 아이디를 입력하세요">
+                    <div th:if="${#fields.hasErrors('loginId')}"
+                         class="auth-error-field"
+                         th:errors="*{loginId}">
+                    </div>
+                </div>
+
+                <!-- 이메일 -->
+                <div class="auth-field">
+                    <label class="auth-label" for="email">이메일</label>
+                    <input id="email"
+                           type="email"
+                           th:field="*{email}"
+                           class="auth-input"
+                           placeholder="이메일 주소를 입력하세요">
+                    <div th:if="${#fields.hasErrors('email')}"
+                         class="auth-error-field"
+                         th:errors="*{email}">
+                    </div>
+                </div>
+
+                <!-- 이름 -->
+                <div class="auth-field">
+                    <label class="auth-label" for="name">이름</label>
+                    <input id="name"
+                           type="text"
+                           th:field="*{name}"
+                           class="auth-input"
+                           placeholder="이름을 입력하세요">
+                    <div th:if="${#fields.hasErrors('name')}"
+                         class="auth-error-field"
+                         th:errors="*{name}">
+                    </div>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="auth-field">
+                    <label class="auth-label" for="password">비밀번호</label>
+                    <input id="password"
+                           type="password"
+                           th:field="*{password}"
+                           class="auth-input"
+                           placeholder="비밀번호를 입력하세요">
+                    <div th:if="${#fields.hasErrors('password')}"
+                         class="auth-error-field"
+                         th:errors="*{password}">
+                    </div>
+                </div>
+
+                <!-- 중복 아이디/이메일 등 커스텀 에러 -->
+                <div th:if="${error}" class="auth-error" th:text="${error}"></div>
+
+                <!-- 가입 버튼 -->
+                <button type="submit" class="auth-btn-primary">가입하기</button>
+            </form>
+
+            <!-- 가입 시 장점 안내 -->
+            <ul class="auth-benefits">
+                <li>언제든 다시 돌아와서 이전 일기를 편하게 확인할 수 있습니다.</li>
+                <li>추후 달력과 통계 기능도 함께 사용할 수 있도록 준비 중입니다.</li>
+            </ul>
+
+            <!-- 로그인 링크 -->
+            <div class="auth-link-row">
+                <span>이미 계정이 있으신가요?</span>
+                <a th:href="@{/login}" class="auth-link">로그인</a>
+            </div>
+        </div>
+
+        <!-- 오른쪽 노트 묶음 -->
+        <div class="auth-side-column auth-side-right">
+            <!-- 노트 3 -->
+            <section class="auth-note auth-note-3">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-pink">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">이메일은 이렇게 사용돼요</h3>
+                <ul class="auth-note-list">
+                    <li>비밀번호 찾기와 중요한 안내 메일 발송에 사용됩니다.</li>
+                    <li>과도한 광고 대신 서비스 안내 위주로만 보내드릴 예정이에요.</li>
+                    <li>나중에 마이페이지에서 이메일을 수정할 수 있도록 준비 중입니다.</li>
+                </ul>
+            </section>
+
+            <!-- 노트 4 -->
+            <section class="auth-note auth-note-4">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-yellow">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">가입 후 할 수 있는 것들</h3>
+                <ul class="auth-note-list">
+                    <li>날짜별로 일기를 차곡차곡 모아둘 수 있어요.</li>
+                    <li>곧 추가될 통계·캘린더 기능으로 흐름을 한눈에 볼 수 있어요.</li>
+                    <li>힘든 날에는 예전의 나를 다시 돌아보는 작은 힘이 되어 줄 거예요.</li>
+                </ul>
+            </section>
+        </div>
+
+    </div>
 </div>
 </body>
 </html>

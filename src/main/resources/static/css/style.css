@@ -1,21 +1,79 @@
-/* ===== 전체 배경/레이아웃 기본 ===== */
+/* =========================
+   기본 리셋
+   ========================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* =========================
+   전체 배경/레이아웃 기본
+   ========================= */
 
 body.diary-body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #ffe9a9; /* 위아래 옅은 노랑 */
+    color: #333333;
+
+    min-height: 100vh;
+    background: linear-gradient(
+            to bottom,
+            #fff5cf 0%,
+            #e8f4ec 45%,
+            #ffe9a9 100%
+    );
 }
 
-/* 메인 영역: 가운데 파스텔 민트 박스 느낌 */
+.main,
+.diary-main,
 .main-area {
-    min-height: calc(100vh - 70px); /* 헤더 높이만큼 제외 */
+    min-height: calc(100vh - 64px);
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: #e8f4ec; /* 연한 민트색 */
+    align-items: flex-start;
+    padding: 40px 16px 60px;
 }
 
-/* ===== 헤더 보완 ===== */
+.page-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* 공통 유틸 */
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* =========================
+   헤더
+   ========================= */
+
+.header {
+    background: #fffbe6;
+    border-bottom: 1px solid #f1e6b8;
+    height: 64px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.header-inner {
+    width: 100%;
+    margin: 0;
+    height: 64px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 좌측 로고 */
 
 .logo-area {
     display: flex;
@@ -27,30 +85,125 @@ body.diary-body {
     font-size: 22px;
 }
 
-/* header, header-flex, logo, nav-menu, nav-item 은
-   기존 정의를 그대로 사용하되, 필요시 약간만 튜닝 */
-.header {
-    background: #ffffff;
-    border-bottom: 1px solid #e6e6e6;
-    padding: 12px 32px;
-}
-
-.header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #4a6b5a;
+    font-size: 24px;
+    font-weight: 700;
+    color: #405f4f;
     text-decoration: none;
 }
 
-/* ===== 메인 히어로 영역 ===== */
+.logo-sub {
+    font-size: 14px;
+    color: #888888;
+}
+
+/* 우측 영역(메뉴 + 사용자 인사) */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* 네비게이션 */
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 15px;
+    color: #4f5b66;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-item:hover {
+    background: #f3f7f5;
+    color: #222222;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* layout.html 에서 쓰는 강조 메뉴 */
+
+.nav-highlight {
+    background: #9cc9aa;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.nav-highlight:hover {
+    background: #8ab998;
+    color: #ffffff;
+}
+
+/* 필요하면 과거 primary 스타일과도 호환 */
+
+.nav-item-primary {
+    background: #9cc9aa;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.nav-item-primary:hover {
+    background: #8ab998;
+    color: #ffffff;
+}
+
+/* 로그인 인사말 */
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: #4f5b66;
+}
+
+.header-user-name {
+    font-weight: 600;
+    color: #365046;
+}
+
+.header-user-greet {
+    opacity: 0.9;
+}
+
+/* =========================
+   홈 히어로
+   ========================= */
+
+.main-area {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
 
 .home-hero {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 16px 60px;
+
+    background: #e8f4ec;
+    border-radius: 24px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
@@ -59,16 +212,21 @@ body.diary-body {
     font-weight: 600;
     letter-spacing: 2px;
     color: #365046;
+    margin-bottom: 24px;
+}
+
+.home-subtitle {
+    font-size: 15px;
+    color: #666666;
     margin-bottom: 32px;
 }
 
-/* "일기 작성" 버튼 */
 .home-btn {
     display: inline-block;
     padding: 14px 40px;
     border-radius: 999px;
     border: none;
-    background: #9cc9aa; /* 부드러운 초록 버튼 */
+    background: #9cc9aa;
     color: #ffffff;
     font-size: 20px;
     font-weight: 500;
@@ -79,11 +237,594 @@ body.diary-body {
 
 .home-btn:hover {
     filter: brightness(0.97);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
     transform: translateY(-1px);
 }
 
-.home-btn:active {
-    transform: translateY(1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+/* =========================
+   홈 – 기능 소개 3칸
+   ========================= */
+
+.home-feature-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 32px;
+}
+
+.home-feature-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    padding: 18px 20px 18px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(213, 227, 214, 0.7);
+}
+
+.home-feature-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #3b4f42;
+    margin-bottom: 8px;
+}
+
+.home-feature-text {
+    font-size: 14px;
+    color: #6b746b;
+    line-height: 1.6;
+}
+
+/* =========================
+   홈 – 로그인/회원가입 안내
+   ========================= */
+
+.home-auth-callout {
+    margin-top: 32px;
+    padding: 20px 22px;
+    border-radius: 20px;
+    background: #fffef7;
+    border: 1px dashed rgba(201, 192, 151, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.home-auth-text {
+    flex: 1;
+}
+
+.home-auth-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #3b4f42;
+}
+
+.home-auth-desc {
+    margin: 0;
+    font-size: 14px;
+    color: #6b746b;
+}
+
+.home-auth-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* =========================
+   공통 버튼
+   ========================= */
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    background: #9cc9aa;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+    background: #8ab998;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid #c6d6c8;
+    background: #ffffff;
+    color: #3d5545;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease, border-color 0.1s ease;
+}
+
+.btn-secondary:hover {
+    background: #f5faf6;
+    border-color: #9cc9aa;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+/* =========================
+   로그인/회원가입 공통
+   ========================= */
+
+.auth-main {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px 60px;
+}
+
+.auth-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.9fr);
+    gap: 32px;
+    align-items: stretch;
+}
+
+/* 좌측 소개 카드(있을 때) */
+
+.auth-intro-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 28px 26px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(213, 227, 214, 0.7);
+}
+
+.auth-intro-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #36493e;
+    margin: 0 0 8px;
+}
+
+.auth-intro-text {
+    font-size: 14px;
+    color: #6b746b;
+    line-height: 1.6;
+}
+
+/* 우측 폼 카드 */
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 28px 30px 26px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(213, 227, 214, 0.8);
+}
+
+.auth-title {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #36493e;
+}
+
+.auth-subtitle {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #7a8374;
+}
+
+/* 로그인/회원가입 폼 */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.auth-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #4f5b66;
+    font-weight: 500;
+}
+
+.auth-input {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #d7dde2;
+    padding: 9px 11px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.auth-input:focus {
+    border-color: #9cc9aa;
+    box-shadow: 0 0 0 3px rgba(156, 201, 170, 0.25);
+    background: #ffffff;
+}
+
+.auth-input::placeholder {
+    color: #b0b7c2;
+}
+
+/* 에러/알림 */
+
+.form-error {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #d9534f;
+}
+
+.form-global-error {
+    margin-top: 6px;
+    margin-bottom: 4px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #fff1f0;
+    color: #c0392b;
+    font-size: 13px;
+}
+
+/* 로그인/회원가입 버튼 라인 */
+
+.auth-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    gap: 12px;
+}
+
+.auth-btn-primary {
+    flex: 1;
+    padding: 11px 0;
+    border-radius: 999px;
+    border: none;
+    background: #9cc9aa;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.auth-btn-primary:hover {
+    background: #8ab998;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+}
+
+.auth-bottom-text {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #68736b;
+    text-align: center;
+}
+
+.auth-bottom-text a {
+    color: #4a7c61;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-bottom-text a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   공통 폼 스타일 (일기 작성에서도 사용)
+   ========================= */
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4f5b66;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #d7dde2;
+    padding: 9px 11px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: #9cc9aa;
+    box-shadow: 0 0 0 3px rgba(156, 201, 170, 0.25);
+    background: #ffffff;
+}
+
+.form-textarea {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #d7dde2;
+    padding: 10px 12px;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.6;
+    transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.form-textarea:focus {
+    border-color: #9cc9aa;
+    box-shadow: 0 0 0 3px rgba(156, 201, 170, 0.25);
+    background: #ffffff;
+}
+
+/* =========================
+   일기 작성 기본(상세 연출은 diary.css에서)
+   ========================= */
+
+.diary-form-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 24px;
+    padding: 28px 32px 26px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* 감정 선택 라인 */
+
+.emotion-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.emotion-row select {
+    flex: 1;
+}
+
+/* 이미지 업로드 박스 – diary.css에서 추가 스타일 입힘 전 기본값 */
+
+.image-upload-box {
+    margin-top: 4px;
+    border-radius: 16px;
+    border: 1px dashed #d7dde2;
+    padding: 18px 16px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 제출 버튼 */
+
+.diary-submit-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.diary-submit-btn {
+    min-width: 200px;
+    padding: 12px 32px;
+    border-radius: 999px;
+    border: none;
+    background: #9cc9aa;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.diary-submit-btn:hover {
+    background: #8ab998;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+}
+
+/* =========================
+   반응형(간단)
+   ========================= */
+
+@media (max-width: 960px) {
+    .header-inner {
+        padding: 0 16px;
+    }
+
+    .home-hero {
+        padding: 60px 16px 40px;
+    }
+
+    .home-feature-row {
+        grid-template-columns: 1fr;
+    }
+
+    .home-auth-callout {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .auth-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .diary-form-wrapper {
+        padding: 24px 18px 22px;
+    }
+}
+/* =========================
+   로그인 페이지 – 핀 꽂힌 포스트잇 노트
+   (login.html의 auth- 클래스를 기준으로)
+   ========================= */
+
+/* 전체 레이아웃: 가운데 카드 + 양옆 노트 */
+
+.auth-wrapper {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px 60px;
+}
+
+.auth-layout {
+    max-width: 1100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* 양쪽 포스트잇 묶음 */
+
+.auth-side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+}
+
+/* 포스트잇 기본 카드 */
+
+.auth-note {
+    position: relative;
+    padding: 20px 18px 16px;
+    border-radius: 18px;
+    background: #fffdf7;
+    box-shadow: 0 18px 32px rgba(15, 23, 42, 0.16);
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    font-size: 13px;
+    color: #4b5563;
+}
+
+/* 왼쪽/오른쪽 포스트잇 각각 살짝 기울이기 */
+
+.auth-side-left .auth-note-1 {
+    transform: translateX(-16px) translateY(-6px) rotate(-2.4deg);
+}
+.auth-side-left .auth-note-2 {
+    transform: translateX(-8px) translateY(8px) rotate(1.6deg);
+}
+
+.auth-side-right .auth-note-3 {
+    transform: translateX(12px) translateY(-4px) rotate(1.8deg);
+}
+.auth-side-right .auth-note-4 {
+    transform: translateX(18px) translateY(10px) rotate(-2deg);
+}
+
+/* 포스트잇 제목/리스트 */
+
+.auth-note-title {
+    margin: 18px 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.auth-note-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* Material 아이콘 기반 압정 위치/느낌 */
+
+.auth-note-pin {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-16deg);
+    font-size: 26px;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* 노트별로 핀 위치를 약간씩 다르게 */
+
+.auth-note-1 .auth-note-pin {
+    top: -18px;
+    left: 62%;
+}
+.auth-note-2 .auth-note-pin {
+    top: -16px;
+    left: 72%;
+}
+.auth-note-3 .auth-note-pin {
+    top: -20px;
+    left: 36%;
+}
+.auth-note-4 .auth-note-pin {
+    top: -16px;
+    left: 68%;
+}
+
+/* 핀 색상 (login.html에서 쓰는 클래스명 기준) */
+
+.auth-note-pin-orange { color: #fb923c; }   /* 주황 */
+.auth-note-pin-green  { color: #22c55e; }   /* 연두 */
+.auth-note-pin-pink   { color: #ec4899; }   /* 핑크 */
+.auth-note-pin-yellow { color: #facc15; }   /* 노랑 */
+
+/* 가운데 로그인 카드 여백 정리 (auth-card는 기존 스타일 유지) */
+
+.auth-card {
+    position: relative;
+    z-index: 1;  /* 포스트잇 아래에 깔리지 않도록 */
+}
+
+/* =========================
+   로그인 포스트잇 – 반응형
+   ========================= */
+
+@media (max-width: 1024px) {
+
+    .auth-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .auth-side-column {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .auth-note {
+        transform: none;       /* 기울임 제거 */
+        width: 200px;
+        max-width: 100%;
+    }
+
+    /* 좁은 화면에서는 핀을 카드 왼쪽 위로 단순 배치 */
+    .auth-note-pin {
+        top: -14px;
+        left: 18px;
+        transform: rotate(-16deg);
+    }
 }

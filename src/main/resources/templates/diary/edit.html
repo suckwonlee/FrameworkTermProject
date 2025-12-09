@@ -1,10 +1,211 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::content})">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>일기 수정</title>
 </head>
+
 <body>
-$END$
+<div th:fragment="content" class="diary-main">
+    <div class="page-container">
+
+        <section class="diary-form-wrapper">
+            <h2>일기 수정하기</h2>
+            <p class="home-hero-info">
+                기존 일기를 수정하거나, 새로운 이미지를 선택해 변경할 수 있습니다.
+            </p>
+
+            <form th:action="@{|/diary/${diary.id}/edit|}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <!-- 제목 -->
+                <div class="form-field">
+                    <label for="title" class="form-label">제목</label>
+                    <input id="title"
+                           type="text"
+                           name="title"
+                           class="form-input"
+                           th:value="${diary.title}"
+                           required>
+                </div>
+
+                <!-- 내용 -->
+                <div class="form-field">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea id="content"
+                              name="content"
+                              class="form-textarea"
+                              rows="10"
+                              required
+                              th:text="${diary.content}"></textarea>
+                </div>
+
+                <!-- 오늘의 기분 -->
+                <div class="form-field">
+                    <label for="emotion" class="form-label">오늘의 기분 (선택)</label>
+                    <select id="emotion"
+                            name="emotion"
+                            class="form-select">
+                        <option value="">🙂 선택 안 함</option>
+                        <option value="기쁨" th:selected="${diary.emotion == '기쁨'}">😄 기쁨</option>
+                        <option value="설렘" th:selected="${diary.emotion == '설렘'}">✨ 설렘</option>
+                        <option value="평온" th:selected="${diary.emotion == '평온'}">😌 평온</option>
+                        <option value="우울" th:selected="${diary.emotion == '우울'}">😔 우울</option>
+                        <option value="피곤" th:selected="${diary.emotion == '피곤'}">😴 피곤</option>
+                        <option value="화남" th:selected="${diary.emotion == '화남'}">😡 화남</option>
+                    </select>
+                </div>
+
+                <!-- 이미지 업로드 + 드래그 앤 드롭 -->
+                <div class="form-field">
+                    <label class="form-label">이미지 (선택)</label>
+
+                    <div class="image-upload-area">
+                        <!-- 실제 파일 인풋 -->
+                        <input id="image-input"
+                               type="file"
+                               name="image"
+                               accept="image/*"
+                               class="image-input-hidden">
+
+                        <!-- 드롭존 (기본: write.html 과 동일) -->
+                        <div id="image-dropzone" class="image-dropzone">
+                            <p class="image-dropzone-label">
+                                새 이미지를 업로드하여 기존 이미지를 교체할 수 있습니다.<br>
+                                아래 버튼을 눌러 선택하거나, 드래그하여 올려보세요.
+                            </p>
+                            <button type="button"
+                                    id="image-upload-button"
+                                    class="image-upload-button">
+                                이미지 선택
+                            </button>
+                        </div>
+
+                        <!-- 미리보기: 기존 이미지가 있으면 write.html 형식으로 초기 표시 -->
+                        <div id="image-preview-wrapper"
+                             class="image-preview-wrapper"
+                             th:classappend="${diary.images.size() > 0} ? ' has-image' : ''">
+
+                            <div class="image-preview-inner">
+                                <img id="image-preview"
+                                     class="image-preview"
+                                     th:if="${diary.images.size() > 0}"
+                                     th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
+                                     alt="이미지 미리보기">
+
+                                <img id="image-preview"
+                                     class="image-preview"
+                                     th:if="${diary.images.size() == 0}"
+                                     alt="이미지 미리보기">
+
+                                <button type="button"
+                                        id="image-remove-button"
+                                        class="image-remove-button"
+                                        aria-label="이미지 삭제">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <p class="auth-info">
+                        새로운 이미지를 업로드하면 기존 이미지는 삭제되고 새 파일로 교체됩니다.
+                    </p>
+                </div>
+
+                <!-- 저장 버튼 -->
+                <div class="diary-submit-row">
+                    <button type="submit" class="diary-submit-btn">
+                        수정 완료
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </div>
+
+    <!-- write.html 에 있던 스크립트를 그대로 복사 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var fileInput = document.getElementById("image-input");
+            var dropzone = document.getElementById("image-dropzone");
+            var uploadButton = document.getElementById("image-upload-button");
+            var previewWrapper = document.getElementById("image-preview-wrapper");
+            var previewImg = document.querySelector("#image-preview");
+            var removeButton = document.getElementById("image-remove-button");
+
+            if (!fileInput || !dropzone || !uploadButton || !previewWrapper || !removeButton) {
+                return;
+            }
+
+            function resetImage() {
+                fileInput.value = "";
+                previewImg.src = "";
+                previewWrapper.classList.remove("has-image");
+                dropzone.style.display = "block";
+            }
+
+            function showImage(file) {
+                if (!file.type || !file.type.startsWith("image/")) {
+                    alert("이미지 파일만 선택할 수 있습니다.");
+                    resetImage();
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewWrapper.classList.add("has-image");
+                    dropzone.style.display = "none";
+                };
+                reader.readAsDataURL(file);
+            }
+
+            uploadButton.addEventListener("click", function () {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener("change", function () {
+                var file = fileInput.files && fileInput.files[0];
+                if (file) {
+                    showImage(file);
+                } else {
+                    resetImage();
+                }
+            });
+
+            dropzone.addEventListener("dragover", function (event) {
+                event.preventDefault();
+                dropzone.classList.add("drag-over");
+            });
+
+            dropzone.addEventListener("dragleave", function (event) {
+                event.preventDefault();
+                dropzone.classList.remove("drag-over");
+            });
+
+            dropzone.addEventListener("drop", function (event) {
+                event.preventDefault();
+                dropzone.classList.remove("drag-over");
+
+                var file = event.dataTransfer.files && event.dataTransfer.files[0];
+                if (file) {
+                    fileInput.files = event.dataTransfer.files;
+                    showImage(file);
+                }
+            });
+
+            removeButton.addEventListener("click", function () {
+                resetImage();
+            });
+
+        });
+    </script>
+
+</div>
 </body>
 </html>

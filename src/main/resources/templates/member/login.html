@@ -9,47 +9,124 @@
 <body>
 <div th:fragment="content" class="auth-wrapper">
 
-    <div class="auth-card">
-        <h2 class="auth-title">다이어리 로그인</h2>
-        <p class="auth-subtitle">오늘의 마음을 기록하기 위한 작은 준비입니다.</p>
+    <!-- 가운데 카드 + 양옆 노트들 레이아웃 -->
+    <div class="auth-layout">
 
-        <form method="post" action="/login" class="auth-form">
+        <!-- 왼쪽 노트 묶음 -->
+        <div class="auth-side-column auth-side-left">
+            <!-- 노트 1 -->
+            <section class="auth-note auth-note-1">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-orange">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">오늘의 기록 팁</h3>
+                <ul class="auth-note-list">
+                    <li>하루 중 기억에 남는 순간 하나만 골라도 괜찮아요.</li>
+                    <li>문장 형태가 아니어도, 단어 몇 개만 적어도 충분해요.</li>
+                    <li>중요한 일보다, 사소한 기분 변화를 적어도 좋아요.</li>
+                </ul>
+            </section>
 
-            <div class="auth-field">
-                <label for="loginId" class="auth-label">아이디</label>
-                <!-- Spring Security 기본 파라미터 이름 username 사용, 실제 값은 loginId -->
-                <input id="loginId"
-                       type="text"
-                       name="username"
-                       class="auth-input"
-                       placeholder="아이디를 입력하세요"
-                       required>
-            </div>
-
-            <div class="auth-field">
-                <label for="password" class="auth-label">비밀번호</label>
-                <input id="password"
-                       type="password"
-                       name="password"
-                       class="auth-input"
-                       placeholder="비밀번호를 입력하세요"
-                       required>
-            </div>
-
-            <!-- 로그인 실패 시 ?error 파라미터로 넘어오는 기본 처리 -->
-            <div th:if="${param.error}" class="auth-error">
-                아이디 또는 비밀번호를 다시 확인해주세요.
-            </div>
-
-            <button type="submit" class="auth-btn-primary">로그인</button>
-        </form>
-
-        <div class="auth-link-row">
-            <span>아직 회원이 아니신가요?</span>
-            <a th:href="@{/register}" class="auth-link">회원가입</a>
+            <!-- 노트 2 -->
+            <section class="auth-note auth-note-2">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-green">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">짧게 써도 됩니다</h3>
+                <ul class="auth-note-list">
+                    <li>“오늘은 좀 지쳤다.” 이런 한 줄만 남겨도 기록이에요.</li>
+                    <li>에너지가 없으면 한 줄, 여유가 있으면 조금 더만 써보세요.</li>
+                </ul>
+            </section>
         </div>
-    </div>
 
+        <!-- 가운데 로그인 카드 -->
+        <div class="auth-card">
+            <div class="auth-header-icon">🔒</div>
+            <h2 class="auth-title">다이어리 로그인</h2>
+            <p class="auth-subtitle">오늘의 마음을 기록하기 위한 작은 준비입니다.</p>
+
+            <!-- /login 으로 POST, username 파라미터에 loginId를 담는다 -->
+            <form method="post" th:action="@{/login}" class="auth-form">
+
+                <!-- 아이디(loginId) -->
+                <div class="auth-field">
+                    <label class="auth-label" for="loginId">아이디</label>
+                    <input id="loginId"
+                           type="text"
+                           name="username"
+                           class="auth-input"
+                           placeholder="아이디를 입력하세요"
+                           required>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="auth-field">
+                    <label class="auth-label" for="password">비밀번호</label>
+                    <input id="password"
+                           type="password"
+                           name="password"
+                           class="auth-input"
+                           placeholder="비밀번호를 입력하세요"
+                           required>
+                </div>
+
+                <!-- 로그인 실패 / 로그아웃 메시지 -->
+                <div th:if="${param.error}" class="auth-error">
+                    아이디 또는 비밀번호를 다시 확인해주세요.
+                </div>
+
+                <div th:if="${param.logout}" class="auth-info">
+                    정상적으로 로그아웃되었습니다.
+                </div>
+
+                <!-- 로그인 버튼 -->
+                <button type="submit" class="auth-btn-primary">로그인</button>
+            </form>
+
+            <!-- 로그인 장점 안내 -->
+            <ul class="auth-benefits">
+                <li>작성한 일기는 로그인한 나만 볼 수 있습니다.</li>
+                <li>여러 기기에서 같은 계정으로 이어서 사용할 수 있습니다.</li>
+            </ul>
+
+            <!-- 회원가입 링크 -->
+            <div class="auth-link-row">
+                <span>아직 회원이 아니신가요?</span>
+                <a th:href="@{/register}" class="auth-link">회원가입</a>
+            </div>
+        </div>
+
+        <!-- 오른쪽 노트 묶음 -->
+        <div class="auth-side-column auth-side-right">
+            <!-- 노트 3 -->
+            <section class="auth-note auth-note-3">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-pink">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">이런 날에 써보세요</h3>
+                <ul class="auth-note-list">
+                    <li>괜히 마음이 복잡했던 날</li>
+                    <li>작은 성취나 칭찬을 들은 날</li>
+                    <li>누군가와 대화가 오래 기억에 남는 날</li>
+                </ul>
+            </section>
+
+            <!-- 노트 4 -->
+            <section class="auth-note auth-note-4">
+                <span class="material-symbols-outlined auth-note-pin auth-note-pin-yellow">
+                    push_pin
+                </span>
+                <h3 class="auth-note-title">돌아봤을 때 좋은 것들</h3>
+                <ul class="auth-note-list">
+                    <li>그날 들었던 말 한마디</li>
+                    <li>내가 했던 선택 하나</li>
+                    <li>그때의 온도나 풍경 같은 사소한 기억</li>
+                </ul>
+            </section>
+        </div>
+
+    </div>
 </div>
 </body>
 </html>

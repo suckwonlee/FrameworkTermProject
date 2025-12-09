@@ -16,12 +16,18 @@ public class MemberService {
 
     public boolean register(JoinRequest req) {
 
-        // 이메일 중복 체크
-        if(memberRepository.existsByEmail(req.getEmail())) {
+        // 아이디 중복
+        if (memberRepository.existsByLoginId(req.getLoginId())) {
+            return false;
+        }
+
+        // 이메일 중복
+        if (memberRepository.existsByEmail(req.getEmail())) {
             return false;
         }
 
         Member member = Member.builder()
+                .loginId(req.getLoginId())
                 .email(req.getEmail())
                 .name(req.getName())
                 .password(encoder.encode(req.getPassword()))

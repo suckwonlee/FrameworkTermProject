@@ -1,10 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::content})">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>내 일기장</title>
 </head>
+
 <body>
-$END$
+<div th:fragment="content" class="diary-main">
+    <div class="page-container">
+
+        <section class="diary-library-list">
+            <div class="diary-library-header">
+                <h2>내 일기장</h2>
+                <p>지금까지 남겨 둔 일기를 날짜와 함께 한눈에 볼 수 있는 공간입니다.</p>
+
+                <form method="get" th:action="@{/diary/my}"
+                      style="margin-top:14px; display:flex; gap:8px; align-items:center;">
+
+                    <input type="date" name="startDate"
+                           th:value="${startDate}"
+                           style="padding:6px 10px; border-radius:8px; border:1px solid #ccd3c9;">
+
+                    <span style="font-size:14px; color:#555;">~</span>
+
+                    <input type="date" name="endDate"
+                           th:value="${endDate}"
+                           style="padding:6px 10px; border-radius:8px; border:1px solid #ccd3c9;">
+
+                    <button type="submit" name="search" value="yes"
+                            style="padding:6px 16px; border-radius:8px; background:#9cc9aa; color:white; border:none;">
+                        검색
+                    </button>
+
+                    <a th:href="@{/diary/my}"
+                       style="padding:6px 14px; border-radius:8px; background:white; border:1px solid #ccd3c9; color:#5b6458; text-decoration:none;">
+                        전체보기
+                    </a>
+                </form>
+            </div>
+
+            <!-- 비어있을 때 -->
+            <div th:if="${#lists.isEmpty(diaries)}" class="diary-empty">
+                아직 작성한 일기가 없습니다.<br>
+                오늘 첫 페이지를 채워 보시겠어요?
+            </div>
+
+            <!-- 리스트 -->
+            <div th:if="${!#lists.isEmpty(diaries)}" class="diary-library-grid">
+                <article th:each="diary : ${diaries}" class="diary-library-card">
+
+                    <div class="diary-library-meta">
+                        <span th:text="${#temporals.format(diary.createdAt, 'yyyy-MM-dd')}">2025-01-01</span>
+                        <span th:if="${diary.emotion != null and diary.emotion != ''}">
+                            · <span th:text="${diary.emotion}">기분</span>
+                        </span>
+                    </div>
+
+                    <h3 class="diary-library-title">
+                        <a th:href="@{|/diary/${diary.id}|}"
+                           th:text="${diary.title}"
+                           style="text-decoration:none; color:#3f5b4e;"></a>
+                    </h3>
+
+                    <div class="diary-library-body">
+                        <div class="diary-library-text"
+                             th:text="${#strings.abbreviate(diary.content, 80)}">
+                            내용 일부 미리보기
+                        </div>
+
+                        <div class="diary-library-thumb-wrapper"
+                             th:if="${diary.images != null and !#lists.isEmpty(diary.images)}">
+                            <img class="diary-library-thumb"
+                                 th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
+                                 alt="일기 이미지 썸네일">
+                        </div>
+                    </div>
+
+                    <div class="diary-library-actions">
+                        <form th:action="@{|/diary/${diary.id}/delete|}"
+                              method="post"
+                              class="delete-diary-form">
+                            <button type="submit">삭제</button>
+                        </form>
+                    </div>
+
+                </article>
+            </div>
+
+        </section>
+
+    </div>
+</div>
 </body>
 </html>

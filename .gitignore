@@ -5,6 +5,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### 업로드된 이미지/파일 무시 ###
+# 프로젝트 내부 uploads 폴더를 Git에서 완전 제외
+/uploads/
+/uploads/diary/
+
 ### STS ###
 .apt_generated
 .classpath

@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::title}, ~{::content})">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>일기 상세 보기</title>
 </head>
+
 <body>
-$END$
+<div th:fragment="content" class="diary-main">
+    <div class="page-container">
+
+        <section class="diary-form-wrapper">
+
+            <h2 th:text="${diary.title}">일기 제목</h2>
+
+            <p class="home-hero-info" style="margin-top:4px; margin-bottom:18px;">
+                <span th:text="${#temporals.format(diary.createdAt,'yyyy-MM-dd HH:mm')}">작성일</span>
+                <span th:if="${diary.emotion != null}">
+                    · <span th:text="${diary.emotion}">기분</span>
+                </span>
+            </p>
+
+            <div style="white-space: pre-line; font-size:15px; color:#4a4a4a; margin-bottom:20px;">
+                <span th:text="${diary.content}">내용</span>
+            </div>
+
+            <div th:if="${diary.images != null and !#lists.isEmpty(diary.images)}"
+                 style="margin-bottom:28px;">
+                <img th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
+                     style="max-width:100%; border-radius:14px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+            </div>
+
+            <div style="margin-top:24px; display:flex; gap:10px;">
+                <a th:href="@{/diary/my}" class="btn-secondary">목록으로 돌아가기</a>
+
+                <a th:if="${diary.createdAt.toLocalDate().isEqual(T(java.time.LocalDate).now())}"
+                   th:href="@{|/diary/${diary.id}/edit|}"
+                   class="btn-primary">수정하기</a>
+
+                <form th:action="@{|/diary/${diary.id}/delete|}"
+                      method="post"
+                      class="delete-diary-form">
+                    <button type="submit"
+                            class="btn-secondary"
+                            style="background:#ffefef; border:1px solid #ffbcbc;">
+                        삭제
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+    </div>
+</div>
 </body>
 </html>

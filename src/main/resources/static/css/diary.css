@@ -1,0 +1,475 @@
+/* =========================
+   공통 – 일기 페이지 기본 레이아웃
+   ========================= */
+
+.diary-main {
+    /* 좌우 여백은 최소 40px 정도만 유지, 위/아래는 그대로 */
+    padding: 48px 40px 64px;
+
+    /* main 안에서 가로 전체를 쓰도록 */
+    width: 100%;
+}
+
+.diary-main .page-container {
+    /* 화면을 넓게 쓰되, 너무 끝까지는 가지 않도록 */
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+
+/* =========================
+   일기 작성 화면 – 노트 느낌 카드
+   ========================= */
+
+.diary-form-wrapper {
+    /* 컨테이너 폭을 거의 꽉 쓰도록 */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px 48px 36px;
+    border-radius: 26px;
+    background: #fffdf7;
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.10);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 바깥 테두리 */
+.diary-form-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    border: 1px solid rgba(214, 200, 160, 0.6);
+    pointer-events: none;
+}
+
+/* 왼쪽 여백 라인 */
+.diary-form-wrapper::after {
+    content: none;
+    border-left: none;
+}
+/* 제목/설명 영역 */
+.diary-form-wrapper h2 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #364c40;
+}
+
+.diary-form-wrapper .home-hero-info {
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #7b867a;
+}
+
+/* 각 필드 간격 */
+.diary-form-wrapper .form-field {
+    margin-bottom: 20px;
+}
+
+.diary-form-wrapper .form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #5a6a5d;
+}
+
+/* 입력창 / 셀렉트 공통 */
+.diary-form-wrapper .form-input,
+.diary-form-wrapper .form-select {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #d7dde2;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.diary-form-wrapper .form-input:focus,
+.diary-form-wrapper .form-select:focus {
+    border-color: #9cc9aa;
+    box-shadow: 0 0 0 3px rgba(156, 201, 170, 0.25);
+    background: #ffffff;
+}
+
+/* 일기 본문 – 도트 그리드 일기장 스타일 */
+.diary-form-wrapper .form-textarea {
+    width: 100%;
+    min-height: 260px;
+    border-radius: 16px;
+    border: 1px solid #d7dde2;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+
+    font-family: "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #424b42;
+
+    /* 크림색 종이 위에 도트 그리드 */
+    background-color: #fffdf6;
+    background-image:
+            radial-gradient(circle, rgba(209, 213, 219, 0.7) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: 12px 12px;
+
+    box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+            0 12px 26px rgba(15, 23, 42, 0.10);
+}
+
+/* 포커스 시 살짝 강조 */
+.diary-form-wrapper .form-textarea:focus {
+    border-color: #9cc9aa;
+    box-shadow:
+            0 0 0 3px rgba(156, 201, 170, 0.25),
+            0 14px 28px rgba(15, 23, 42, 0.16);
+    background-color: #fffef8;
+}
+
+
+/* =========================
+   이미지 업로드 – 드래그 앤 드롭
+   ========================= */
+
+.image-upload-area {
+    margin-top: 4px;
+}
+
+/* 숨겨진 실제 파일 인풋 */
+.image-input-hidden {
+    display: none;
+}
+
+/* 드롭존 */
+.image-dropzone {
+    border-radius: 16px;
+    border: 1px dashed rgba(214, 200, 160, 0.9);
+    background: rgba(252, 249, 238, 0.95);
+    padding: 18px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.image-dropzone-label {
+    font-size: 13px;
+    color: #7b735e;
+    margin: 0 0 10px;
+}
+
+.image-upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    background: #9cc9aa;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+}
+
+.image-upload-button:hover {
+    background: #8ab998;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px);
+}
+
+.image-dropzone.drag-over {
+    border-color: #9cc9aa;
+    background: #fffaf0;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* 미리보기 영역 */
+.image-preview-wrapper {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 14px;
+    background: rgba(252, 249, 238, 0.9);
+    border: 1px dashed rgba(214, 200, 160, 0.9);
+}
+
+.image-preview-wrapper.has-image {
+    display: block;
+}
+
+.image-preview-inner {
+    position: relative;
+    display: inline-block;
+}
+
+.image-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 260px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* 삭제 버튼 – 호버 시 X 표시 */
+.image-remove-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.12s ease, background 0.12s ease;
+}
+
+.image-preview-inner:hover .image-remove-button {
+    opacity: 1;
+}
+
+.image-remove-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* =========================
+   내 일기장 목록
+   ========================= */
+
+.diary-library-list {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 0 32px;
+}
+
+.diary-library-header {
+    margin-bottom: 18px;
+}
+
+.diary-library-header h2 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    color: #364c40;
+}
+
+.diary-library-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #7b867a;
+}
+
+/* 목록 그리드 */
+.diary-library-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.diary-library-card {
+    padding: 14px 14px 12px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.diary-library-meta {
+    font-size: 12px;
+    color: #9a9f93;
+}
+
+.diary-library-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #3f5b4e;
+    margin: 0;
+}
+
+.diary-library-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.diary-library-text {
+    font-size: 13px;
+    color: #5b6458;
+    line-height: 1.6;
+    flex: 1;
+
+    /* 미리보기 높이 제한 (약 3줄 정도) */
+    max-height: 4.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+
+.diary-library-thumb-wrapper {
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f4f1e7;
+}
+
+.diary-library-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 일기 없음 안내 */
+.diary-empty {
+    margin-top: 20px;
+    padding: 18px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    font-size: 13px;
+    color: #5b6458;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+    .diary-main .page-container {
+        max-width: 100%;
+    }
+
+    .diary-form-wrapper {
+        max-width: 100%;
+        padding: 32px 24px 26px;
+        margin: 12px auto 24px;
+    }
+
+    .diary-library-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .diary-library-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* 일기 페이지에서는 main의 좌우 패딩 제거 */
+.diary-body .main {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* =========================
+   내 일기장 – 한 줄에 한 카드(가로로 길게)
+   ========================= */
+
+.diary-library-grid {
+    display: flex;
+    flex-direction: column;  /* 세로로 쌓기 */
+    gap: 16px;               /* 카드 사이 간격 */
+}
+
+.diary-library-card {
+    width: 100%;             /* 리스트 폭 전부 사용 */
+}
+/* 어둡게 덮는 배경 */
+#delete-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    z-index: 900;
+}
+
+#delete-popup-overlay.open {
+    display: block;
+}
+
+/* 팝업 박스 */
+#delete-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    width: 340px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: 0.25s ease;
+    z-index: 999;
+}
+
+#delete-popup.open {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* 팝업 제목 */
+.delete-popup-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #3f4b3f;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* 팝업 내용 */
+.delete-popup-message {
+    font-size: 14px;
+    color: #4f594f;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* 버튼 정렬 */
+.delete-popup-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* 확인 버튼 */
+.delete-popup-confirm-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: #c94848;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-popup-cancel-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: #e7e7e7;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.delete-popup-confirm-btn:hover {
+    background: #b73f3f;
+}
+
+.delete-popup-cancel-btn:hover {
+    background: #d9d9d9;
+}

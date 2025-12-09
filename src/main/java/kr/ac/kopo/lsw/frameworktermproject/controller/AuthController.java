@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 
@@ -23,18 +25,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute JoinRequest joinRequest,
+    public String register(@Valid @ModelAttribute("joinRequest") JoinRequest joinRequest,
                            BindingResult bindingResult,
                            Model model) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "member/register";
         }
 
         boolean result = memberService.register(joinRequest);
 
-        if(!result) {
-            model.addAttribute("error", "이미 사용 중인 이메일입니다.");
+        if (!result) {
+            model.addAttribute("error", "이미 사용 중인 아이디 또는 이메일입니다.");
             return "member/register";
         }
 
