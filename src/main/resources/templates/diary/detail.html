@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div th:fragment="content" class="diary-main">
+<div th:fragment="content" class="diary-main" th:inline="none">
     <div class="page-container">
 
         <section class="diary-form-wrapper">
@@ -21,14 +21,27 @@
                 </span>
             </p>
 
-            <div style="white-space: pre-line; font-size:15px; color:#4a4a4a; margin-bottom:20px;">
-                <span th:text="${diary.content}">내용</span>
+            <!-- 2025-12-15 이전: 구 일기(텍스트 + 첨부 이미지 방식) -->
+            <div th:if="${diary.createdAt.toLocalDate().isBefore(T(java.time.LocalDate).of(2025, 12, 15))}">
+                <div class="diary-lined-view diary-lined-block" style="white-space:pre-wrap; word-break:break-word;">
+                    <span th:text="${diary.content}">본문</span>
+
+                    <div th:if="${diary.images != null and !#lists.isEmpty(diary.images)}"
+                         class="diary-inline-image-block"
+                         style="margin-top:14px;">
+                        <img class="diary-inline-image"
+                             th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
+                             alt="첨부 이미지"
+                             style="display:block; margin:12px auto; max-width:min(760px, 100%); height:auto; border-radius:16px;">
+                    </div>
+                </div>
             </div>
 
-            <div th:if="${diary.images != null and !#lists.isEmpty(diary.images)}"
-                 style="margin-bottom:28px;">
-                <img th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
-                     style="max-width:100%; border-radius:14px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+            <!-- 2025-12-15 이후: 신 일기(토큰 기반 인라인 렌더) -->
+            <div th:if="${!diary.createdAt.toLocalDate().isBefore(T(java.time.LocalDate).of(2025, 12, 15))}">
+                <textarea id="diary-raw-content" style="display:none;" th:text="${diary.content}"></textarea>
+                <div id="diary-render-root"></div>
+                <script th:src="@{/js/diary-content-render.js}"></script>
             </div>
 
             <div style="margin-top:24px; display:flex; gap:10px;">

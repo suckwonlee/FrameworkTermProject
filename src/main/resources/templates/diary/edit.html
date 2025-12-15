@@ -7,20 +7,19 @@
 </head>
 
 <body>
-<div th:fragment="content" class="diary-main">
+<div th:fragment="content" class="diary-main" th:inline="none">
     <div class="page-container">
 
         <section class="diary-form-wrapper">
             <h2>일기 수정하기</h2>
             <p class="home-hero-info">
-                기존 일기를 수정하거나, 새로운 이미지를 선택해 변경할 수 있습니다.
+                본문 안에 이미지를 삽입하면 그대로 저장됩니다.
             </p>
 
-            <form th:action="@{|/diary/${diary.id}/edit|}"
-                  method="post"
-                  enctype="multipart/form-data">
+            <form id="diary-edit-form"
+                  th:action="@{|/diary/${diary.id}/edit|}"
+                  method="post">
 
-                <!-- 제목 -->
                 <div class="form-field">
                     <label for="title" class="form-label">제목</label>
                     <input id="title"
@@ -31,18 +30,39 @@
                            required>
                 </div>
 
-                <!-- 내용 -->
                 <div class="form-field">
-                    <label for="content" class="form-label">내용</label>
+                    <div class="diary-content-label-row">
+                        <label class="form-label">내용</label>
+
+                        <div class="inline-image-tool"
+                             data-upload-url="/diary/editor/image-upload"
+                             data-target-editor="contentEditor"
+                             data-target-textarea="content">
+                            <input class="inline-image-input"
+                                   type="file"
+                                   accept="image/*">
+                            <button type="button" class="inline-image-insert-btn">
+                                본문에 이미지 삽입
+                            </button>
+                            <span class="inline-image-hint">커서 위치에 이미지가 들어갑니다.</span>
+                        </div>
+                    </div>
+
+                    <!-- 편집 영역 -->
+                    <div id="contentEditor"
+                         class="form-textarea"
+                         contenteditable="true"
+                         spellcheck="false"
+                         style="white-space:pre-wrap; overflow:auto;"></div>
+
+                    <!-- 저장용 원문(토큰 형태) -->
                     <textarea id="content"
                               name="content"
-                              class="form-textarea"
-                              rows="10"
                               required
+                              style="display:none;"
                               th:text="${diary.content}"></textarea>
                 </div>
 
-                <!-- 오늘의 기분 -->
                 <div class="form-field">
                     <label for="emotion" class="form-label">오늘의 기분 (선택)</label>
                     <select id="emotion"
@@ -58,65 +78,6 @@
                     </select>
                 </div>
 
-                <!-- 이미지 업로드 + 드래그 앤 드롭 -->
-                <div class="form-field">
-                    <label class="form-label">이미지 (선택)</label>
-
-                    <div class="image-upload-area">
-                        <!-- 실제 파일 인풋 -->
-                        <input id="image-input"
-                               type="file"
-                               name="image"
-                               accept="image/*"
-                               class="image-input-hidden">
-
-                        <!-- 드롭존 (기본: write.html 과 동일) -->
-                        <div id="image-dropzone" class="image-dropzone">
-                            <p class="image-dropzone-label">
-                                새 이미지를 업로드하여 기존 이미지를 교체할 수 있습니다.<br>
-                                아래 버튼을 눌러 선택하거나, 드래그하여 올려보세요.
-                            </p>
-                            <button type="button"
-                                    id="image-upload-button"
-                                    class="image-upload-button">
-                                이미지 선택
-                            </button>
-                        </div>
-
-                        <!-- 미리보기: 기존 이미지가 있으면 write.html 형식으로 초기 표시 -->
-                        <div id="image-preview-wrapper"
-                             class="image-preview-wrapper"
-                             th:classappend="${diary.images.size() > 0} ? ' has-image' : ''">
-
-                            <div class="image-preview-inner">
-                                <img id="image-preview"
-                                     class="image-preview"
-                                     th:if="${diary.images.size() > 0}"
-                                     th:src="@{'/uploads/diary/' + ${diary.images[0].storedFilename}}"
-                                     alt="이미지 미리보기">
-
-                                <img id="image-preview"
-                                     class="image-preview"
-                                     th:if="${diary.images.size() == 0}"
-                                     alt="이미지 미리보기">
-
-                                <button type="button"
-                                        id="image-remove-button"
-                                        class="image-remove-button"
-                                        aria-label="이미지 삭제">
-                                    ✕
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <p class="auth-info">
-                        새로운 이미지를 업로드하면 기존 이미지는 삭제되고 새 파일로 교체됩니다.
-                    </p>
-                </div>
-
-                <!-- 저장 버튼 -->
                 <div class="diary-submit-row">
                     <button type="submit" class="diary-submit-btn">
                         수정 완료
@@ -128,84 +89,7 @@
 
     </div>
 
-    <!-- write.html 에 있던 스크립트를 그대로 복사 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var fileInput = document.getElementById("image-input");
-            var dropzone = document.getElementById("image-dropzone");
-            var uploadButton = document.getElementById("image-upload-button");
-            var previewWrapper = document.getElementById("image-preview-wrapper");
-            var previewImg = document.querySelector("#image-preview");
-            var removeButton = document.getElementById("image-remove-button");
-
-            if (!fileInput || !dropzone || !uploadButton || !previewWrapper || !removeButton) {
-                return;
-            }
-
-            function resetImage() {
-                fileInput.value = "";
-                previewImg.src = "";
-                previewWrapper.classList.remove("has-image");
-                dropzone.style.display = "block";
-            }
-
-            function showImage(file) {
-                if (!file.type || !file.type.startsWith("image/")) {
-                    alert("이미지 파일만 선택할 수 있습니다.");
-                    resetImage();
-                    return;
-                }
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    previewWrapper.classList.add("has-image");
-                    dropzone.style.display = "none";
-                };
-                reader.readAsDataURL(file);
-            }
-
-            uploadButton.addEventListener("click", function () {
-                fileInput.click();
-            });
-
-            fileInput.addEventListener("change", function () {
-                var file = fileInput.files && fileInput.files[0];
-                if (file) {
-                    showImage(file);
-                } else {
-                    resetImage();
-                }
-            });
-
-            dropzone.addEventListener("dragover", function (event) {
-                event.preventDefault();
-                dropzone.classList.add("drag-over");
-            });
-
-            dropzone.addEventListener("dragleave", function (event) {
-                event.preventDefault();
-                dropzone.classList.remove("drag-over");
-            });
-
-            dropzone.addEventListener("drop", function (event) {
-                event.preventDefault();
-                dropzone.classList.remove("drag-over");
-
-                var file = event.dataTransfer.files && event.dataTransfer.files[0];
-                if (file) {
-                    fileInput.files = event.dataTransfer.files;
-                    showImage(file);
-                }
-            });
-
-            removeButton.addEventListener("click", function () {
-                resetImage();
-            });
-
-        });
-    </script>
-
+    <script th:src="@{/js/diary-inline-image.js}"></script>
 </div>
 </body>
 </html>

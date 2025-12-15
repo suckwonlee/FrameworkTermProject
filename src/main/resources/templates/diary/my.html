@@ -64,11 +64,18 @@
                     </h3>
 
                     <div class="diary-library-body">
-                        <div class="diary-library-text"
-                             th:text="${#strings.abbreviate(diary.content, 80)}">
-                            내용 일부 미리보기
+                        <!-- 원문(잘리지 않은 본문) 보관: JS가 여기서 토큰/썸네일을 뽑습니다 -->
+                        <textarea class="diary-content-raw" style="display:none;" th:text="${diary.content}"></textarea>
+
+                        <!-- 미리보기 텍스트는 JS가 채움 (서버에서 abbreviate 하면 토큰이 잘려서 문제 발생) -->
+                        <div class="diary-library-text">내용 일부 미리보기</div>
+
+                        <!-- 본문 토큰에서 뽑은 이미지 썸네일(기존 업로드 썸네일이 없을 때만 표시) -->
+                        <div class="diary-library-thumb-wrapper diary-inline-thumb-wrapper" style="display:none;">
+                            <img class="diary-library-thumb diary-inline-thumb" alt="본문 이미지 썸네일">
                         </div>
 
+                        <!-- 기존 1장 업로드 썸네일 -->
                         <div class="diary-library-thumb-wrapper"
                              th:if="${diary.images != null and !#lists.isEmpty(diary.images)}">
                             <img class="diary-library-thumb"
@@ -91,6 +98,8 @@
         </section>
 
     </div>
+
+    <script th:src="@{/js/diary-my-strip.js}"></script>
 </div>
 </body>
 </html>

@@ -97,15 +97,18 @@
     background: #ffffff;
 }
 
-/* 일기 본문 – 도트 그리드 일기장 스타일 */
+/* 일기 본문 – 줄노트(밑줄) 스타일 (epubguide 스타일) */
+/* 일기 본문 – 줄노트(밑줄) 스타일 (정렬 보정 버전) */
 .diary-form-wrapper .form-textarea {
     width: 100%;
     min-height: 260px;
     border-radius: 16px;
     border: 1px solid #d7dde2;
     padding: 14px 18px;
+
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 28px;
+
     resize: vertical;
     outline: none;
     box-sizing: border-box;
@@ -113,12 +116,23 @@
     font-family: "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: #424b42;
 
-    /* 크림색 종이 위에 도트 그리드 */
     background-color: #fffdf6;
-    background-image:
-            radial-gradient(circle, rgba(209, 213, 219, 0.7) 1px, transparent 1px);
-    background-size: 24px 24px;
-    background-position: 12px 12px;
+
+    /* padding 영역 때문에 줄이 어긋나 보이는 문제를 막기 위해 content-box 기준으로 줄을 그림 */
+    background-origin: content-box;
+    background-clip: content-box;
+
+    /* 한 줄마다 밑줄(반복). line-height(28px)와 완전히 일치하게 맞춤 */
+    background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 27px,
+            #D4E6CE 27px,
+            #D4E6CE 28px
+    );
+
+    /* textarea 스크롤에서도 밑줄이 같이 움직이도록 */
+    background-attachment: local;
 
     box-shadow:
             inset 0 0 0 1px rgba(255, 255, 255, 0.8),
@@ -132,6 +146,36 @@
             0 0 0 3px rgba(156, 201, 170, 0.25),
             0 14px 28px rgba(15, 23, 42, 0.16);
     background-color: #fffef8;
+}
+
+/* 상세 보기 – 본문을 줄노트 배경으로 보여주기 (정렬 보정 버전) */
+.diary-lined-view {
+    white-space: pre-line;
+    font-size: 15px;
+    line-height: 30px;
+    color: #4a4a4a;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(215, 221, 226, 0.8);
+
+    background-color: #fffdf6;
+
+    /* padding 영향 제거 */
+    background-origin: content-box;
+    background-clip: content-box;
+
+    /* line-height(30px)와 완전히 일치하게 맞춤 */
+    background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 29px,
+            #D4E6CE 29px,
+            #D4E6CE 30px
+    );
+
+    box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+            0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -472,4 +516,121 @@
 
 .delete-popup-cancel-btn:hover {
     background: #d9d9d9;
+}
+.diary-content-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.inline-image-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inline-image-tool .inline-image-input {
+    display: none;
+}
+
+.inline-image-tool .inline-image-insert-btn {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #ccd3c9;
+    background: #ffffff;
+    color: #3f5b4e;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.inline-image-tool .inline-image-insert-btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.inline-image-tool .inline-image-hint {
+    font-size: 12px;
+    color: #7b867a;
+}
+
+.diary-raw-content {
+    display: none;
+}
+
+.diary-lined-block {
+    margin-bottom: 14px;
+}
+
+.diary-inline-image-block {
+    margin: 14px 0 18px;
+}
+
+.diary-inline-image {
+    display: block;
+    max-width: 100%;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.diary-attach-title {
+    font-size: 13px;
+    color: #7b867a;
+    margin-bottom: 8px;
+}
+
+.diary-attach-image {
+    max-width: 100%;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.diary-inline-image-badge {
+    margin-left: 6px;
+    font-size: 12px;
+}
+/* 본문 인라인 이미지(블로그처럼 글-이미지-글) 중앙 정렬 + 적당히 작게 */
+.diary-inline-image-block {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0;
+}
+
+.diary-inline-image {
+    width: min(560px, 100%);
+    max-height: 560px;
+    object-fit: contain;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    background: rgba(255, 255, 255, 0.85);
+}
+.inline-preview-root {
+    margin-top: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(215, 221, 226, 0.8);
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.inline-preview-text {
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.8em;
+    color: #424b42;
+    margin-bottom: 12px;
+}
+
+.inline-preview-image-block {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0 16px;
+}
+
+.inline-preview-image {
+    width: min(520px, 100%);
+    max-height: 420px;
+    object-fit: contain;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
 }

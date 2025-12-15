@@ -2,19 +2,20 @@ package kr.ac.kopo.lsw.frameworktermproject.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
-import java.io.InputStream;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileService {
 
-    // 작업 디렉터리 기준으로 uploads/diary 에 저장
-    private final Path diaryUploadDir = Paths.get("uploads", "diary");
+    // 실행 작업 디렉터리 기준으로 uploads/diary 에 저장 (경로 흔들림 방지)
+    private final Path diaryUploadDir = Paths.get(System.getProperty("user.dir"), "uploads", "diary");
 
     /**
      * 일기 이미지 파일 저장
@@ -28,9 +29,7 @@ public class FileService {
 
         try {
             // 저장 폴더 없으면 생성
-            if (!Files.exists(diaryUploadDir)) {
-                Files.createDirectories(diaryUploadDir);
-            }
+            Files.createDirectories(diaryUploadDir);
 
             String originalFilename = file.getOriginalFilename();
             String extension = "";
@@ -45,7 +44,7 @@ public class FileService {
             String randomName = UUID.randomUUID().toString().replace("-", "") + extension;
             Path targetPath = diaryUploadDir.resolve(randomName);
 
-            // 실제 파일 저장 (임시파일 → 목적지 직접 복사)
+            // 실제 파일 저장
             try (InputStream in = file.getInputStream()) {
                 Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -54,7 +53,6 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException("이미지 파일 저장 중 오류가 발생했습니다.", e);
         }
-
     }
 
     /**
@@ -67,13 +65,17 @@ public class FileService {
         }
         return "/uploads/diary/" + storedFilename;
     }
+
     public void deleteDiaryImage(String storedFilename) {
         try {
-            Path path = Paths.get("uploads/diary").resolve(storedFilename);
+            if (storedFilename == null || storedFilename.isEmpty()) {
+                return;
+            }
+
+            Path path = diaryUploadDir.resolve(storedFilename);
             Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new RuntimeException("이미지 삭제 중 오류 발생: " + storedFilename, e);
         }
     }
-
 }

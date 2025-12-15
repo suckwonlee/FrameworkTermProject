@@ -13,11 +13,14 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/diary.css}">
+
+    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
+
 </head>
 
 <body class="diary-body">
 
-<!-- 상단 헤더 -->
 <header class="header">
     <div class="header-inner">
 
@@ -52,14 +55,10 @@
     </div>
 </header>
 
-<!-- 메인 영역 -->
 <main class="main">
     <div class="page-container" th:replace="${content}"></div>
 </main>
 
-<!-- ========================= -->
-<!--     삭제 팝업 (공통)       -->
-<!-- ========================= -->
 <div id="delete-popup-overlay"></div>
 
 <div id="delete-popup">
@@ -75,8 +74,6 @@
     </div>
 </div>
 
-<!-- 삭제 스크립트 -->
 <script src="/js/delete-confirm.js"></script>
-
 </body>
 </html>

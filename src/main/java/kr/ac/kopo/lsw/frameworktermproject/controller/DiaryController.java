@@ -12,7 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.UUID;
 import java.time.LocalDate;
 import java.util.List;
 import java.security.Principal;
@@ -176,6 +184,43 @@ public class DiaryController {
 
         return "redirect:/diary/" + diaryId;
     }
+
+    /**
+     * Toast UI Editor 이미지 업로드
+     * POST /diary/editor/image-upload
+     */
+    @PostMapping("/editor/image-upload")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> uploadEditorImage(
+            @RequestParam("image") MultipartFile image,
+            Principal principal
+    ) throws IOException {
+
+        if (image == null || image.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "empty file"));
+        }
+
+        String originalName = image.getOriginalFilename();
+        String ext = "";
+        if (originalName != null) {
+            int dot = originalName.lastIndexOf('.');
+            if (dot >= 0 && dot < originalName.length() - 1) {
+                ext = originalName.substring(dot);
+            }
+        }
+
+        String storedFilename = UUID.randomUUID().toString().replace("-", "") + ext;
+
+        Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads", "diary");
+        Files.createDirectories(uploadDir);
+
+        Path savePath = uploadDir.resolve(storedFilename);
+        image.transferTo(savePath.toFile());
+
+        String url = "/uploads/diary/" + storedFilename;
+        return ResponseEntity.ok(Map.of("url", url));
+    }
+
 
 }
 
